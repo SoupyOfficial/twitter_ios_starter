@@ -16,11 +16,23 @@ class LoginViewController: UIViewController {
         
         TwitterAPICaller.client?.login(url: myUrl, success: {
             
+            UserDefaults.standard.set(true, forKey: "loggedIn")
+            
             self.performSegue(withIdentifier: "LoginToHome", sender: self)
             
         }, failure: {(Error) in
             print("Login Failed")
         })
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if(UserDefaults.standard.bool(forKey: "loggedIn")) {
+            
+            self.performSegue(withIdentifier: "LoginToHome", sender: self)
+            
+        }
         
     }
     
