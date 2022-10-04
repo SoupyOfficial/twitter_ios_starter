@@ -39,9 +39,35 @@ class HomeTableViewController: UITableViewController {
             cell.userPhotoView.image = UIImage(data: imgData)
         }
         
+        let entities = tweetArray[indexPath.row]["entities"] as! NSDictionary
         
+        let mediaPresent = entities["media"] != nil
+        
+//        if(mediaPresent) {
+//            let media = entities["media"]["media_url_https"]
+//            print(media)
+//            //let mediaUrlPresent:Bool = media[media.index(of: "media_url_https")].
+//
+//           if(mediaUrlPresent) {
+//                let mediaUrl = media[media.index(of: "media_url_https")] as! String
+//                print(mediaUrl)
+//            }
+//        }
+        
+        cell.setLike(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetID = tweetArray[indexPath.row]["id"] as! Int
+        //print(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        cell.setRetweet(tweetArray[indexPath.row]["retweeted"] as! Bool)
+//        if(entities["media"]) {
+//            cell.mediaImg.image = entities["media"]["media_url_https"]
+//        }
         
         return cell
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
     }
     
     @objc func loadTweets() {
@@ -104,6 +130,8 @@ class HomeTableViewController: UITableViewController {
         
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 160
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -129,6 +157,7 @@ class HomeTableViewController: UITableViewController {
             loadMoreTweets()
         }
     }
+    
     
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
